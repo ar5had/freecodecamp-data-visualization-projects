@@ -1,5 +1,5 @@
 * {
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "Montserrat", sans-serif;
   color: #666;
 }
 
@@ -8,15 +8,15 @@ body {
 }
 
 .main {
-  background: #555;
   margin-top: 40px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
 .heading {
+  font-family: 'Rock Salt', cursive;
   color: #E35865;
   line-height: 1.5;
   margin: 10px;
+  font-size: 30px;
 }
 
 #textarea {
