@@ -155,7 +155,7 @@ h4 {
 }
 
 .recipe.opened {
-  transform: translate3d(0, -2.8%, 0);
+  transform: translate3d(0, -3%, 0);
   box-shadow: 0rem 0rem 40rem 0rem rgba(0, 0, 0, 0.12), 0rem 6rem 12rem rgba(0, 0, 0, 0.08);
 }
 .recipe.opened .recipeHeader {
@@ -267,4 +267,9 @@ label {
 
 .modalBody {
   overflow-y: auto;
+}
+
+.recipe {
+  transition-property: box-shadow, transform;
+  transition-duration: 444ms;
 }
