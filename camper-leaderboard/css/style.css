@@ -96,10 +96,8 @@ p {
     margin: 0;
   }
 }
-.category.active {
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: #aaa;
+.category.active>p {
+  color: #d2d071;
 }
 
 .category.recentPoints, .category.allTimePoints {
