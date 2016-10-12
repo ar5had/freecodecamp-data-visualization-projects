@@ -1,8 +1,12 @@
+function plot() {
+
 var margin = {top: 80, bottom: 60, left: 80, right: 40};
 
 var width = window.innerWidth - margin.right - margin.left;
 var height = window.innerHeight - margin.bottom - margin.top - 80;
-
+height = height > 400 ? height : 300;
+width = (width+margin.left+margin.right) > 400 ? width : 400;
+	
 var cs = d3.interpolateSpectral;
 var xs = d3.scaleLinear().range([0, width]);
 // var ys = d3.scaleLinear()
@@ -14,13 +18,12 @@ var ys = d3.scaleBand()
 
 var monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-var xa = d3.axisBottom(xs).ticks(10);
+var xa = d3.axisBottom(xs).ticks(width < 600 ? 5 : 10);
 var ya = d3.axisLeft(ys);
 
 var url = "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json";
 
-var graph = d3.select("body")
-					.append("svg");
+var graph = d3.select("svg");
 
 graph = graph.attr("width", width + margin.right + margin.left)
 		.attr("height", height + margin.top + margin.bottom)
@@ -56,23 +59,26 @@ $.getJSON(url, function(data, status) {
 		
 		var diff = upperLimit - lowerLimit; 
 		
-		var colorScale = d3.select("svg")
-							.append("g")
-							.attr("transform", "translate("+(width-364)+",20)");
+		var blockWidth = width < 600 ? width / 14 : 30;
 		
+		var colorScale = graph
+							.append("g")
+							.attr("class", "colorScale")
+							.attr("transform", "translate("+(width  -(blockWidth * 15) )+",-60)");
+		 
 		for(var i = limits[0]; i <= limits[1]; i++) {
 			var newColor= colorScale.append("g");
 			newColor.append("rect")	
 				.attr("fill", cs(i/diff))
-				.attr("width", 30)
+				.attr("width", blockWidth)
 				.attr("height", 20)
-				.attr("x", i* 30);
+				.attr("x", i* blockWidth);
 			newColor.append("text")
 				.text(i)
 				.attr("class", "colorText")
 				.attr("y", 40)
 				.attr("text-anchor", "left")
-				.attr("x", i* 30 + 10);
+				.attr("x", i* blockWidth + 10);
 		}
 		
 		graph.append("g")
@@ -96,8 +102,7 @@ $.getJSON(url, function(data, status) {
       .attr("class", "yinfo")
       .text("Months");
 		
-		var div = d3.select("body").append("div")
-								.attr("class", "tooltip");
+		var div = d3.select(".tooltip");
 		
 		graph.selectAll(".rect")
 			.data(data.monthlyVariance)
@@ -126,11 +131,28 @@ $.getJSON(url, function(data, status) {
 			
 	}//gej json ends
 	
-	d3.select("body")
-		.append("h4")
+	d3.select("h4")
 		.text("Monthly Global Land-Surface Temperature");
 
-	d3.select("body")
-		.append("p")
+	d3.select("p")
 		.text("(" + data["monthlyVariance"][0]["year"] + "-" + data["monthlyVariance"][data["monthlyVariance"].length - 1]["year"] + ")");
+});
+
+}
+
+$(document).ready(function() {
+  plot();
+  // for ie 9
+  if(window.attachEvent) {
+    window.attachEvent('onresize', function() {
+        alert('attachEvent - resize');
+    });
+  }
+  else if(window.addEventListener) {
+    window.addEventListener('resize', function() {
+      $("svg").empty();
+			$("h4, p").html("");
+			plot();
+    }, true);
+  }
 });
