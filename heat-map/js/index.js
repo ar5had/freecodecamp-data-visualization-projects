@@ -6,7 +6,7 @@ var width = window.innerWidth - margin.right - margin.left;
 var height = window.innerHeight - margin.bottom - margin.top - 80;
 height = height > 400 ? height : 300;
 width = (width+margin.left+margin.right) > 400 ? width : 400;
-	
+
 var cs = d3.interpolateSpectral;
 var xs = d3.scaleLinear().range([0, width]);
 // var ys = d3.scaleLinear()
@@ -29,7 +29,7 @@ graph = graph.attr("width", width + margin.right + margin.left)
 		.attr("height", height + margin.top + margin.bottom)
 	.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")" );
-		
+
 $.getJSON(url, function(data, status) {
 	if(status != "success") {
 		alert("data fetching failed");
@@ -38,7 +38,7 @@ $.getJSON(url, function(data, status) {
 	else {
 		// doin useful stuff here
 		xs.domain([data["monthlyVariance"][0]["year"], data["monthlyVariance"][data["monthlyVariance"]["length"] - 1]["year"]]);
-		
+
 		var minVar = data["monthlyVariance"].reduce(function(min, elem) {
 			if (elem.variance < min)
 				min = elem.variance;
@@ -50,25 +50,25 @@ $.getJSON(url, function(data, status) {
 				max = elem.variance;
 			return max;
 		}, data["monthlyVariance"][0]["variance"]);
-		
+
 		var upperLimit = data.baseTemperature + maxVar;
-		
+
 		var lowerLimit = data.baseTemperature + minVar;
-		
+
 		var limits = [Math.floor(lowerLimit), Math.ceil(upperLimit)];
-		
-		var diff = upperLimit - lowerLimit; 
-		
+
+		var diff = upperLimit - lowerLimit;
+
 		var blockWidth = width < 600 ? width / 14 : 30;
-		
+
 		var colorScale = graph
 							.append("g")
 							.attr("class", "colorScale")
 							.attr("transform", "translate("+(width  -(blockWidth * 15) )+",-60)");
-		 
+
 		for(var i = limits[0]; i <= limits[1]; i++) {
 			var newColor= colorScale.append("g");
-			newColor.append("rect")	
+			newColor.append("rect")
 				.attr("fill", cs(i/diff))
 				.attr("width", blockWidth)
 				.attr("height", 20)
@@ -80,7 +80,7 @@ $.getJSON(url, function(data, status) {
 				.attr("text-anchor", "left")
 				.attr("x", i* blockWidth + 10);
 		}
-		
+
 		graph.append("g")
 			.attr("transform", "translate(0," + height +")")
 			.attr("id", "xaxis")
@@ -90,8 +90,8 @@ $.getJSON(url, function(data, status) {
 			.attr("x", width/2 - 10)
       .attr("class", "xinfo")
       .text("Years");
-	
-	
+
+
 		graph.append("g")
 			.attr("id", "yaxis")
 			.call(ya)
@@ -101,9 +101,9 @@ $.getJSON(url, function(data, status) {
 			.attr("x", -height/2 + 30)
       .attr("class", "yinfo")
       .text("Months");
-		
+
 		var div = d3.select(".tooltip");
-		
+
 		graph.selectAll(".rect")
 			.data(data.monthlyVariance)
 			.enter()
@@ -125,12 +125,12 @@ $.getJSON(url, function(data, status) {
 			.attr("height", ys.step())
 			.attr("width", Math.floor(width/(262)) )
 			.attr("transform", function(d){return "translate(" + xs(d.year) + "," + ys(monthName[d.month-1])+")";} )
-			.attr("fill", function(d){ 
+			.attr("fill", function(d){
 					return cs((d.variance + data.baseTemperature)/diff)
 			});
-			
+
 	}//gej json ends
-	
+
 	d3.select("h4")
 		.text("Monthly Global Land-Surface Temperature");
 
@@ -152,6 +152,10 @@ $(document).ready(function() {
     window.addEventListener('resize', function() {
       $("svg").empty();
 			$("h4, p").html("");
+			if (window.innerWidth <= 520) {
+    		var mvp = document.getElementById('metaTag');
+    		mvp.setAttribute('content','width=520');
+			}
 			plot();
     }, true);
   }
