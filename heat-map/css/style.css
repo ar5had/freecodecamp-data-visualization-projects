@@ -72,3 +72,7 @@ body {
 .tooltip > span > b {
   font-family: "Ubuntu";
 }
+
+.description {
+  min-width: 520px;
+}
