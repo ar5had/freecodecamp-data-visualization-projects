@@ -72,7 +72,7 @@ function plot() {
 	          			.style("opacity", "1")
 									.transition()
 	          			.duration(200)
-									.style("height","auto");
+									.style("height","190px");
 									$(".name").html(elem["Name"]);
 									$(".place").html(elem["Place"]);
 									$(".time").html(elem["Time"]+" min");
