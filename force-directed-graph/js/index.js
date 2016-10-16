@@ -15,9 +15,13 @@ function plot() {
     .attr("height", height);
   
   var fdg = d3.forceSimulation()
-      .force("link", d3.forceLink())
-      .force("charge", d3.forceManyBody().strength(-2.5))
-      .force("center", d3.forceCenter(width/2, height/2));
+      .force("link", d3.forceLink().distance(30).strength(1))
+      .force("center", d3.forceCenter(width/2, height/2+ 20))
+      .force("collide",d3.forceCollide( function(d){return d.r + 8 }).iterations(5) )
+      .force("charge", d3.forceManyBody())
+      .force("y", d3.forceY(0))
+      .force("x", d3.forceX(0));
+  
   
   d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countries.json", function(error, data) {
     if(error) throw error;
@@ -38,8 +42,8 @@ function plot() {
           .duration(100)
           .style("opacity", 1);
         div.html('<span>'+d.country+'<span>');
-        div.style("left",  (d3.event.pageX + 30) + "px")
-          .style("top", (d3.event.pageY - 30) + "px");
+        div.style("left",  (d3.event.pageX > (width - 200)) ? (d3.event.pageX - 130)+ "px":(d3.event.pageX + 30) + "px")
+          .style("top", (d3.event.pageX > (width - 200)) ? (d3.event.pageY - 44) + "px":(d3.event.pageY - 30) + "px");
       })
 			.on("mouseout", function(){
         div.transition()
@@ -63,8 +67,7 @@ function plot() {
       .on('tick', tick);
     
     fdg.force("link")
-      .links(data.links)
-      .distance(30);
+      .links(data.links);
     function tick() {
       
 			node
@@ -85,14 +88,19 @@ function plot() {
 
 
 function dragstarted(d) {
-  if (!d3.event.active) fdg.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
+  if (!d3.event.active) fdg.alphaTarget(.3).restart();
+   if (d3.event.x > 20 && d3.event.x < width -20)
+  d.fx = d3.event.x;
+  if (d3.event.y > 60 && d3.event.y < height-20)
+  d.fy = d3.event.y;
 }
 
 function dragged(d) {
+  if (d3.event.x > 20 && d3.event.x < width -20)
   d.fx = d3.event.x;
+  if (d3.event.y > 60 && d3.event.y < height-20)
   d.fy = d3.event.y;
+  
 }
 
 function dragended(d) {
@@ -101,7 +109,22 @@ function dragended(d) {
   d.fy = null;
 }
 
+addRandomCircles();
 
 }
 
 plot();
+
+function addRandomCircles() {
+  for(var i = 0; i < 2000; i++) {
+    var x = Math.random() * window.innerWidth,
+        y = Math.random() * window.innerHeight;
+    d3.select("svg")
+      .append("circle")
+      .attr("r", .7)
+      .attr("class", "bkdCircles")
+      .attr("fill", d3.interpolateWarm(Math.random()/2))
+      .attr("cx", x)
+      .attr("cy", y);
+  }
+}

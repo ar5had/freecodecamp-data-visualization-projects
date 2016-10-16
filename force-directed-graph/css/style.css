@@ -1,10 +1,20 @@
 body {
-  background: #fff;
+  background: url("https://raw.githubusercontent.com/arshdkhn1/force-directed-graph/master/images/bg.png");
 }
 
 h3, * {
   text-align: center;
   font-family: "Montserrat", sans-serif;
+}
+
+h3 {
+  font-weight: 700;
+  text-transform: uppercase;
+  word-spacing: 10px;
+  font-size: 25px;
+  color: #444;
+  letter-spacing: 3px;
+  text-shadow: 2px 1px 0px #635d90, 4px 2px 0 #bbb;
 }
 
 .tooltip {
@@ -14,6 +24,7 @@ h3, * {
   font-size: 13px;
   border-radius: 2px;
   position: absolute;
+  box-shadow: 0 0 10px #333;
 }
 
 #graph, svg {
@@ -28,26 +39,33 @@ h3, * {
 }
 
 .link {
-  stroke: #111;
-  stroke-width: 1;
-  stroke-opacity: 0.3;
+  fill: none;
+  stroke-width: 2;
+  stroke: #aaa;
 }
 
 .node {
   position: absolute;
+  border-radius: 50%;
+  border: solid 2px #635d90;
+  background: #635d90;
+  box-shadow: 0 0 2px #999;
   transform: translate(-50%, -50%);
-  border-bottom: solid 1px #333;
-  background: #333;
 }
 
 .node:hover {
-  cursor: pointer;
+  box-shadow: 0 0 10px #333;
 }
 
 .tooltip {
   position: absolute;
 }
 
+@media screen and (max-width: 500px) {
+  h3 {
+    font-size: 15px;
+  }
+}
 .flag {
   display: inline-block;
   width: 16px;
