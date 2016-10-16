@@ -15,12 +15,11 @@ function plot() {
     .attr("height", height);
   
   var fdg = d3.forceSimulation()
-      .force("link", d3.forceLink().distance(30).strength(1))
+      .force("link", d3.forceLink().distance(40).strength(.5))
       .force("center", d3.forceCenter(width/2, height/2+ 20))
-      .force("collide",d3.forceCollide( function(d){return d.r + 8 }).iterations(5) )
-      .force("charge", d3.forceManyBody())
-      .force("y", d3.forceY(0))
-      .force("x", d3.forceX(0));
+      .force("charge", d3.forceManyBody().strength(-(height/20)))
+      .force("y", d3.forceY(1))
+      .force("x", d3.forceX(1));
   
   
   d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countries.json", function(error, data) {
@@ -88,7 +87,7 @@ function plot() {
 
 
 function dragstarted(d) {
-  if (!d3.event.active) fdg.alphaTarget(.3).restart();
+  if (!d3.event.active) fdg.alphaTarget(.5).restart();
    if (d3.event.x > 20 && d3.event.x < width -20)
   d.fx = d3.event.x;
   if (d3.event.y > 60 && d3.event.y < height-20)
